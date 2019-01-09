@@ -10,11 +10,23 @@ before_install:
 - tar xf android-sdk_r23.0.2-linux.tgz
 - export ANDROID_HOME=`pwd`/android-sdk-linux
 - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-- ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --filter tools,platform-tools,build-tools-21.0.1,android-16,extra-google-m2repository --no-ui --no-https -a
-- ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --filter extra-android-m2repository --no-ui --no-https -a
+- "( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --filter
+  tools,platform-tools,build-tools-21.0.1,android-16,extra-google-m2repository --no-ui
+  --no-https -a"
+- "( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --filter
+  extra-android-m2repository --no-ui --no-https -a"
 script:
-  - mvn clean install
+- mvn clean install
 skip_cleanup: true
 after_success:
-- chmod + x ./upload-gh-pages. sh
-- ./upload-apk.sh
+- chmod + ./releases. sh
+-sh set_tags.sh
+- "./upload-apk.sh"
+deploy:
+  provider: releases
+  api_key:
+    secure: SQgGoLuLaggkLJ/XzsquJn5xvB2EEsdznT9yI6Z1W+q0A4UznyEy/M3u4zxMIosMi18t4m+l0aTLRhmipkUKtc+kn5ZGIwqRY/c0pJGMWxVqcsmIa//KoDCK4t6PAcrzjfohl0exXh6ZiZ/yHt+dfltDoSy6hKV2LXi4b++YVy7/rZfVQsDSHIvRvsUxNrY6VCuXRx29AVXspxh+LD91myHnEPDCv8+UDQoId1LTvjXO4XoBkC1+eCRepwfTAw6sT42vzt+1IHyfOi+avuQKidxJfEM7Qjbsq76jiqBj8tkwc+uHpACGoQAJdAyWXD6hfjOimuZ7FligTUF9GFBzo34Dif6N/Nq1eK6m5pWhnRcnUCV+Bgexag91mZL8PDdYOS6EZ9tlKYZJZgPRn0MuKmqtQv0A5u1NnYNOyqATJrt3BtBdkId/ihVfGMiUhN3WPPG5xpqrM/r5/aAagHhiGgEbXE/e6b7JjnIvO2n28cC1APFX84brDWwO04sRwTdlq2Z3uUUntG7+pYk9VyDrRM6mkKd/cP/pSZ5n7kxR0T0wgXhUxOIic4HBWTrzcmaEVkeCEotAVdAA2aYsi6lAET3G5dSEIjK2fJVbjzkxmXKCIUBgTrqwEpPQcLeWMmShQtxKbUqYZWYIbr+VldC99r7DNj9/YAYICg6byU0erSw=
+  file: "/build/outputs/apk/myapk.apk"
+  on:
+    repo: elsadeny/proxydroid
+    branch: master
