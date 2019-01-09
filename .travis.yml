@@ -16,5 +16,6 @@ script:
   - mvn clean install
 skip_cleanup: true
 after_success:
-- chmod + x ./upload-gh-pages. sh
-- ./upload-apk.sh
+  provider:releases
+  api_key : "d52767544209050a66e1debb3cdcb19fabe10f68"
+  file : "/app/build/outputs/app-release.apk"
